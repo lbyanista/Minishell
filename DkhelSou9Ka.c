@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 18:06:53 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/05/30 18:40:20 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/05/30 19:00:19 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,18 +23,6 @@ char *jointhreestr(char *path, char *bslash, char *cmd)
 
 int main(int ac, char **av)
 {
-	clear();
-	while (1)
-	{	
-		char	*username;
-		char	str[256];
-
-		username = getenv("HOME");
-		printf("%s$", username);
-
-
-	
-		//
     	char *path;
     	char **r;
     	int i;
@@ -42,7 +30,6 @@ int main(int ac, char **av)
 		char **k;
 
     	i = 0;
-		ac = 1;
    	 	path = getenv("PATH");
     	r = ft_split(path, ':');
     	while (r[i])
@@ -66,7 +53,5 @@ int main(int ac, char **av)
 			free(k[j]);
 			j++;
 		}
-	//
-	}
     return 0;
 }
