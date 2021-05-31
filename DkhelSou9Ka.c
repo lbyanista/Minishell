@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 18:06:53 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/05/30 19:00:19 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/05/31 12:30:41 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 char *jointhreestr(char *path, char *bslash, char *cmd)
 {
-	char *joinpathslash = ft_strjoin(path , "/");
+	char *joinpathslash = ft_strjoin(path , bslash);
 	char *tmp = joinpathslash;
 	joinpathslash = ft_strjoin(joinpathslash, cmd);
 	free(tmp);
