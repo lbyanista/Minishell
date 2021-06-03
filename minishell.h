@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 18:06:00 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/05/31 13:26:57 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/06/03 13:16:57 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,6 +15,13 @@
 #include <unistd.h>
 #include <string.h>
 #define clear() printf("\033[H\033[J")
+
+typedef struct s_var
+{
+    int     _error;
+    int     _status;
+}               t_var;
+
 
 char	**ft_split(char const *s, char c);
 char    *ft_strjoin(char const *s1, char const *s2);
