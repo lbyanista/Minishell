@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 18:06:53 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/06/03 17:35:37 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/06/03 17:46:04 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,7 @@ char *jointhreestr(char *path, char *bslash, char *cmd)
 	return (joinpathslash);
 }
 
-int main(int ac, char **av)
+int binarycmd(char *str)
 {
     	char *path;
     	char **r;
@@ -41,7 +41,7 @@ int main(int ac, char **av)
 		while (j < i)
 		{
 			// k[j] = ft_strjoin(r[j], av[1]);
-			k[j] = jointhreestr(r[j], "/", av[1]);
+			k[j] = jointhreestr(r[j], "/", str);
 			if (h == 0)
 			{
 				execve(k[j], &k[j], NULL);
@@ -54,4 +54,10 @@ int main(int ac, char **av)
 			j++;
 		}
     return 0;
+}
+
+int main(int ac, char **av)
+{
+	binarycmd(av[1]);
+	return 0;
 }

@@ -6,15 +6,15 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 18:12:31 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/05/30 18:12:50 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/06/03 17:53:46 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int ft_strlen(const char *str)
+size_t  ft_strlen(const char *str)
 {
-    int i;
+    size_t i;
 
     i = 0;
     while (str[i])

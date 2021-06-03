@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/30 18:06:00 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/06/03 15:09:11 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/06/03 17:58:27 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,10 +25,12 @@ typedef struct s_var
 
 char	**ft_split(char const *s, char c);
 char    *ft_strjoin(char const *s1, char const *s2);
-int     ft_strlen(const char *str);
+size_t  ft_strlen(const char *str);
 int     ft_strcmp(const char *s1, const char *s2);
 int		ft_strequal(const char *s1, const char *s2);
 int     echo(char **args);
 void	ft_putstr_fd(char *s, int fd);
 void	ft_putchar_fd(char c, int fd);
 void	prompt(void);
+int		get_next_line(int fd, char **line);
+char	*ft_strchr(const char *s, int c);

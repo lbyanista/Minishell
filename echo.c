@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/31 12:58:43 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/06/03 17:35:44 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/06/03 18:25:12 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,33 +69,33 @@ int     echo(char **args)
 }
 
 
-// int main(int ac, char **av)
-// {
-// 	clear();
+int main(int ac, char **av)
+{
+	clear();
 	
-// 		prompt();
-// 	// printf("%s\n", getenv("USER"));
-// 	// if (ac > 1)
-// 	// {
-// 	// 	/* code */
+		// prompt();
+	printf("%s\n", getenv("USER"));
+	if (ac > 1)
+	{
+		/* code */
 	
-//     // int j = 0;
-//     // // char *args[3] = {"echo", "hello World"};
-// 	// echo(av);
-//     // // printf("%d\n", j);
+    int j = 0;
+    // char *args[3] = {"echo", "hello World"};
+	echo(av);
+    // printf("%d\n", j);
     
-// 	// }
-// 	// else if (ac == 1)
-// 	// {
-// 	// 	/* code */
-// 	// 	printf("\n");
-// 	// }
-// 	// printf("%ld", check_ifn(&av[1]));
+	}
+	else if (ac == 1)
+	{
+		/* code */
+		printf("\n");
+	}
+	printf("%ld", check_ifn(&av[1]));
 	
 
 
-// 	// // char cwd[255];
-// 	// // printf("%s\n", getcwd(cwd, sizeof(cwd)));
+	// char cwd[255];
+	// printf("%s\n", getcwd(cwd, sizeof(cwd)));
 
-//     return 0;
-// }
+    return 0;
+}

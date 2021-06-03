@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/06 11:44:14 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/06/03 15:07:38 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/06/03 18:21:08 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,18 @@
 
 int main(int ac, char **av)
 {
+	char *str;
+
+	// echo(av);
+	str = malloc(sizeof(str) * 2048);
+	while (1)
+	{
+		prompt();
+		// 
+		read(0, str, 2048);
+		write(1, str, strlen(str));
+	}
 	
-	echo(av);
-	// prompt();
 	return (0);
 }
 
@@ -33,7 +42,7 @@ int main(int ac, char **av)
 // 	// char 	*strpwdmin = "pwd";
 // 	// char	*strpwdmaj = "PWD";
 // 	pid_t h;
-// 	// char	*args[] = {"/bin/ls"};
+// 	char	*args[] = {"/bin/ls"};
 
 	
 // 	username = getenv("HOME");
@@ -42,14 +51,14 @@ int main(int ac, char **av)
 
 
 // 	printf("%s$", username);
-// 	scanf("%s", av[1]);
+// 	scanf("%s", str);
 // 	fflush(stdout);
 // 	// printf("\n%d\n", ft_strlen(str));
 // 	// printf("%s\n", str);
 // 	h = fork();
 // 	if(h == 0){
-// 	//  execve("/bin/ls", args, NULL);
-// 		echo(&av[1]);
+// 	 	execve("/bin/ls", args, NULL);
+// 		// echo(&av[1]);
 // 	 	exit(1);
 // 	}
 // 	else if (h != 0)
