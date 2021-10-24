@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/13 08:15:35 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/23 17:45:13 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/10/24 14:31:14 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -124,6 +124,8 @@ void		ft_dlst_delete_node(t_list *lst);
 t_list		*ft_lst_head(t_list *lst);
 int			is_backslashed(int i, char *str);
 int			find_char(char *str, char c);
+size_t		ft_countwords(char const *s, char *separator);
+char		**spliter(char const *s, char **ptr, char *separator, size_t cw);
 char		**ft_split_input(char const *s, char *separator);
 t_BOOL		quoted_fragment(char c);
 int			find_value(t_data *data, char *var, char **value);
@@ -162,9 +164,14 @@ int			file_search_using_path_var(t_data *data);
 char		*ft_getenv(t_data *data, char *var);
 int			stream_source(t_data *data, int read_end, t_BOOL	simple_cmd);
 void		execve_errs(t_data *data);
+int			is_directory(char *file);
 int			error_msg(t_data *data, int errno_code, char *file);
 
 int			simple_command(t_data *data);
 void		piped_commands(t_data *data);
+void		increase_shelllvl(t_data *data);
+void		export_print(t_data *data);
+int			check_export_syntax(t_data *data, int j);
+void		insert_var(t_data *data, char *input);
 
 #endif

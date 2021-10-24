@@ -6,16 +6,19 @@
 #    By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/13 08:14:39 by ael-mezz          #+#    #+#              #
-#    Updated: 2021/10/23 17:41:12 by mlabrayj         ###   ########.fr        #
+#    Updated: 2021/10/24 14:30:29 by mlabrayj         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS =	main.c								\
 		utils/lst_utils.c					\
+		utils/lst_utils_1.c					\
 		utils/utils.c						\
+		utils/utils_1.c						\
 		utils/utils_2.c						\
 		utils/parsing_utils.c				\
 		utils/execution_utils.c				\
+		utils/execution_utils_1.c			\
 		parsing/parsing.c					\
 		parsing/expansions.c				\
 		parsing/expand_env_vars.c			\
@@ -30,6 +33,8 @@ SRCS =	main.c								\
 		execution/builtins/echo.c			\
 		execution/builtins/env.c			\
 		execution/builtins/export.c			\
+		execution/builtins/export_1.c		\
+		execution/builtins/export_2.c		\
 		execution/builtins/cd.c				\
 		execution/builtins/unset.c
 
@@ -38,7 +43,7 @@ LIBFT =	libft/libft.a
 LDFLAGS= -L/goinfre/mlabrayj/.brew/opt/readline/lib
 CFLAGS= -I/goinfre/mlabrayj/.brew/opt/readline/include
 
-FLAGS = -g -lreadline -ledit $(LDFLAGS) $(CFLAGS) #-Wall -Werror -Wextra #-fsanitize=address
+FLAGS = -g -lreadline -ledit $(LDFLAGS) $(CFLAGS) -Wall -Werror -Wextra #-fsanitize=address
 
 SRCS_PATH =	./srcs
 
