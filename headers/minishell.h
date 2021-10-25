@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/13 08:15:35 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/24 14:31:14 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/10/25 11:45:12 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -173,5 +173,6 @@ void		increase_shelllvl(t_data *data);
 void		export_print(t_data *data);
 int			check_export_syntax(t_data *data, int j);
 void		insert_var(t_data *data, char *input);
+void		error_prompt(t_data *data, char *arg);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 14:16:11 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/10/24 14:22:13 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/10/25 11:45:26 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ void	close_fds_and_wait(t_data *data)
 		data->exit_status = WEXITSTATUS(stat);
 }
 
-static void	error_prompt(t_data *data, char *arg)
+void	error_prompt(t_data *data, char *arg)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
 	ft_putstr_fd(data->prototype[0], STDERR_FILENO);
@@ -61,35 +61,4 @@ static void	error_prompt(t_data *data, char *arg)
 		ft_putstr_fd(arg, STDERR_FILENO);
 		ft_putstr_fd("': ", STDERR_FILENO);
 	}
-}
-
-int	error_msg(t_data *data, int errno_code, char *file)
-{
-	error_prompt(data, file);
-	if (errno_code == M_NOCMD || errno_code == M_NOEXENT)
-	{
-		if (errno_code == M_NOCMD)
-			ft_putstr_fd("command not found\n", STDERR_FILENO);
-		else
-			ft_putstr_fd("No such file or directory\n", STDERR_FILENO);
-		return (127);
-	}
-	else if (errno_code == M_ARGERR || errno_code == M_NOVALID)
-	{
-		if (errno_code == M_NOVALID)
-			ft_putstr_fd("not a valid identifier\n", STDERR_FILENO);
-		else
-			perror(NULL);
-	}
-	else if (errno_code == M_BADACCES)
-	{
-		perror(NULL);
-		return (126);
-	}
-	else if (errno_code == M_STXERR)
-	{
-		ft_putstr_fd("syntax error!\n", STDERR_FILENO);
-		return (258);
-	}
-	return (1);
 }
