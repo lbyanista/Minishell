@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/24 13:54:43 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/10/24 14:05:52 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/10/27 15:41:40 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -94,11 +94,8 @@ char	**spliter(char const *s, char **ptr, char *separator, size_t cw)
 		while (separator_search(s, separator, start) && s[start])
 			start++;
 		j = -1;
-		while (!separator_search(s, separator, start) && s[start])
-		{
+		while (!separator_search(s, separator, start) && s[start++])
 			len++;
-			start++;
-		}
 		start -= len;
 		ptr[i] = ft_calloc(len + 1, sizeof(char));
 		if (!ptr[i])
