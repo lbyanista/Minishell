@@ -6,11 +6,12 @@
 #    By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/05/13 08:14:39 by ael-mezz          #+#    #+#              #
-#    Updated: 2021/10/24 14:30:29 by mlabrayj         ###   ########.fr        #
+#    Updated: 2021/11/01 19:41:58 by mlabrayj         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 SRCS =	main.c								\
+		signals.c							\
 		utils/lst_utils.c					\
 		utils/lst_utils_1.c					\
 		utils/utils.c						\

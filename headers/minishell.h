@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/13 08:15:35 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/29 12:50:10 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/01 19:44:09 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,5 +174,9 @@ void		export_print(t_data *data);
 int			check_export_syntax(t_data *data, int j);
 void		insert_var(t_data *data, char *input);
 void		error_prompt(t_data *data, char *arg);
+
+//============ SIGNALS =======================================
+
+void		sig_handler(int sig);
 
 #endif

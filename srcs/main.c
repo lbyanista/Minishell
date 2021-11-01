@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/13 08:15:00 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/29 13:04:06 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/01 19:42:13 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,19 +40,6 @@ static void	_init(t_data *data)
 	data->fd[3] = ERROR;
 }
 
-void	sig_handler(int sig)
-{
-	if (sig == SIGINT)
-	{
-		rl_on_new_line();
-		rl_redisplay();
-		rl_replace_line("", 0);
-		write(1, "  \b\b\n", 5);
-		rl_on_new_line();
-		rl_redisplay();
-	}
-}
-
 int	main(int argc, char **argv, char *const envp[])
 {
 	t_data	data;
@@ -74,7 +61,10 @@ int	main(int argc, char **argv, char *const envp[])
 			free(data.input);
 		}
 		else if (!data.input)
+		{
+			ft_putstr_fd("exit\n", 1);
 			break ;
+		}
 	}
 	return (0);
 }
