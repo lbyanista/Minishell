@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/15 09:41:53 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/24 13:55:14 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/10/29 12:50:10 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ char	**ft_split_input(char const *s, char *separator)
 	return (spliter(s, ptr, separator, cw));
 }
 
-t_BOOL	quoted_fragment(char c)
+t_bool	quoted_fragment(char c)
 {
 	if (c == '\'' || c == '\"')
 		return (TRUE);

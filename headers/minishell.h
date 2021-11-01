@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/13 08:15:35 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/25 11:45:12 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/10/29 12:50:10 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,7 +43,7 @@
 # define UNSET_ERR 7
 # define NO_FILE -2
 
-typedef int		t_BOOL;
+typedef int		t_bool;
 
 typedef struct s_process
 {
@@ -91,12 +91,12 @@ typedef struct s_data
 	t_file_data		*file_data;
 	int				fd[4];
 	int				end[2];
-	t_BOOL			passive;
-	t_BOOL			is_builtin;
-	t_BOOL			err_path_env;
-	t_BOOL			var_with_equals_sign;
-	t_BOOL			infile;
-	t_BOOL			outfile;
+	t_bool			passive;
+	t_bool			is_builtin;
+	t_bool			err_path_env;
+	t_bool			var_with_equals_sign;
+	t_bool			infile;
+	t_bool			outfile;
 	int				argc;
 	int				quoting_state;
 	int				exit_status;
@@ -127,11 +127,11 @@ int			find_char(char *str, char c);
 size_t		ft_countwords(char const *s, char *separator);
 char		**spliter(char const *s, char **ptr, char *separator, size_t cw);
 char		**ft_split_input(char const *s, char *separator);
-t_BOOL		quoted_fragment(char c);
+t_bool		quoted_fragment(char c);
 int			find_value(t_data *data, char *var, char **value);
 int			theres_atoken(char *fragment);
 int			is_redirection(char *str, int i, int quoting_state);
-t_BOOL		closed_quotes(char *input, int i);
+t_bool		closed_quotes(char *input, int i);
 char		*lst_to_word(t_list *lst);
 int			syntax_checking(t_data *data, int i);
 void		close_fds(t_data *data);
@@ -162,7 +162,7 @@ int			scan_env_vars(t_data *data);
 void		scan_command(t_data *data);
 int			file_search_using_path_var(t_data *data);
 char		*ft_getenv(t_data *data, char *var);
-int			stream_source(t_data *data, int read_end, t_BOOL	simple_cmd);
+int			stream_source(t_data *data, int read_end, t_bool	simple_cmd);
 void		execve_errs(t_data *data);
 int			is_directory(char *file);
 int			error_msg(t_data *data, int errno_code, char *file);

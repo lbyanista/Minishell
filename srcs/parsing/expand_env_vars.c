@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/18 09:45:38 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/23 17:29:07 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/10/29 12:50:10 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,7 +82,7 @@ static char	*assign_var_and_value(t_data *data, char *input, char *new, int *i)
 	return (new);
 }
 
-static t_BOOL	is_env_var(t_data *data, char *input, char **new, int *i)
+static t_bool	is_env_var(t_data *data, char *input, char **new, int *i)
 {
 	if (data->quoting_state != '\'' && input[*i + 1]
 		&& input[*i] == '$' && (ft_isalnum(input[*i + 1])

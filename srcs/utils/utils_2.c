@@ -6,13 +6,13 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 16:44:54 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/23 17:29:07 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/10/29 12:50:10 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-t_BOOL	theres_atoken(char *fragment)
+t_bool	theres_atoken(char *fragment)
 {
 	int	i;
 
@@ -26,14 +26,14 @@ t_BOOL	theres_atoken(char *fragment)
 	return (FALSE);
 }
 
-t_BOOL	is_redirection(char *str, int i, int quoting_state)
+t_bool	is_redirection(char *str, int i, int quoting_state)
 {
 	if ((str[i] == '>' || str[i] == '<') && quoting_state == UNQUOTED)
 		return (TRUE);
 	return (FALSE);
 }
 
-t_BOOL	closed_quotes(char *input, int i)
+t_bool	closed_quotes(char *input, int i)
 {
 	int	j;
 

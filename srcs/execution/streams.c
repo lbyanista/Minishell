@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 11:00:30 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/23 17:29:07 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/10/29 12:50:10 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,7 +90,7 @@ static int	cmd_input_output(t_data *data)
 	return (EXIT_SUCCESS);
 }
 
-int	stream_source(t_data *data, int read_end, t_BOOL	simple_cmd)
+int	stream_source(t_data *data, int read_end, t_bool	simple_cmd)
 {
 	scan_files_list(data);
 	data->fd[2] = dup(STDIN_FILENO);

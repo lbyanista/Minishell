@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/13 08:15:00 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/23 17:30:36 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/10/29 13:04:06 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,11 @@ void	sig_handler(int sig)
 {
 	if (sig == SIGINT)
 	{
-		write(1, "\n", 1);
 		rl_on_new_line();
+		rl_redisplay();
 		rl_replace_line("", 0);
+		write(1, "  \b\b\n", 5);
+		rl_on_new_line();
 		rl_redisplay();
 	}
 }
