@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 17:20:29 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/24 14:08:23 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/01 13:35:17 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,24 +15,24 @@
 int	make_branch(t_data *data, char *fragment)
 {
 	char	*token;
-	int		tmp;
 	int		i;
 
-	i = 0;
+	i = -1;
 	if (!*fragment)
 		return (EXIT_SUCCESS);
-	tmp = data->passive;
+	data->quoting_state = UNQUOTED;
 	token = ft_calloc(ft_strlen(fragment) + 1, sizeof(char));
-	define_quoting_state(data, data->input, i--);
-	while (fragment[++i] && !is_redirection(fragment, i, data->quoting_state))
+	while (fragment[++i] && !is_redirection(data, fragment, i))
 		token[i] = fragment[i];
-	data->passive = tmp;
+	if (!*token)
+		free(token);
 	return (hundle_redirection(data, fragment, token, i));
 }
 
 static int	fill_branch(t_data *data, int i)
 {
 	char	*fragment;
+	int		ret;
 
 	if (!data->command)
 	{
@@ -47,17 +47,17 @@ static int	fill_branch(t_data *data, int i)
 			return (EXIT_SUCCESS);
 		return (EXIT_FAILURE);
 	}
-	if (make_branch(data, fragment))
-		return (EXIT_FAILURE);
+	ret = make_branch(data, fragment);
 	free(fragment);
-	if (data->word)
-		free_list(&data->word);
-	return (EXIT_SUCCESS);
+	free_list(&data->word);
+	if (ret)
+		free_command_struct(*data);
+	return (ret);
 }
 
 static int	fill_pipeline(t_data *data, int i)
 {
-	if (!data->input[i + 1] && data->input[i] != ' ')
+	if (!data->input[i + 1] && data->input[i] != ' ' && data->input[i] != '|')
 		ft_lstadd_back(&data->word, ft_lstnew(ft_substr(data->input, i, 1)));
 	if (data->input[i - 1] == '|')
 		return (EXIT_FAILURE);

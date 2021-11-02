@@ -3,60 +3,69 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:22:16 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/25 11:44:12 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/01 11:19:51 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-int	error_msg_norm(int errno_code)
+void	close_fds(t_data *data)
 {
-	if (errno_code == M_BADACCES)
-	{
-		perror(NULL);
-		return (126);
-	}
-	else if (errno_code == M_STXERR)
-	{
-		ft_putstr_fd("syntax error!\n", STDERR_FILENO);
-		return (258);
-	}
-	return (1);
+	int	i;
+
+	i = -1;
+	while (++i < 4)
+		close(data->fd[i]);
+	close(data->end[0]);
+	close(data->end[1]);
 }
 
-int	error_msg(t_data *data, int errno_code, char *file)
+void	close_fds_and_wait(t_data *data)
 {
-	error_prompt(data, file);
-	if (errno_code == M_NOCMD || errno_code == M_NOEXENT)
+	int		stat;
+	t_list	*tmp;
+
+	close_fds(data);
+	tmp = data->lst_child_id;
+	while (data->lst_child_id)
 	{
-		if (errno_code == M_NOCMD)
-			ft_putstr_fd("command not found\n", STDERR_FILENO);
-		else
-			ft_putstr_fd("No such file or directory\n", STDERR_FILENO);
-		return (127);
+		data->process = data->lst_child_id->content;
+		waitpid(data->process->id, &stat, 0);
+		data->lst_child_id = data->lst_child_id->next;
 	}
-	else if (errno_code == M_ARGERR || errno_code == M_NOVALID)
+	if (WIFEXITED(stat))
+		data->exit_status = WEXITSTATUS(stat);
+	data->lst_child_id = tmp;
+	free_list(&data->lst_child_id);
+}
+
+void	error_prompt(t_data *data, char *arg)
+{
+	ft_putstr_fd("minishell: ", STDERR_FILENO);
+	if (data->prototype)
 	{
-		if (errno_code == M_NOVALID)
-			ft_putstr_fd("not a valid identifier\n", STDERR_FILENO);
-		else
-			perror(NULL);
+		ft_putstr_fd(data->prototype[0], STDERR_FILENO);
+		ft_putstr_fd(": ", STDERR_FILENO);
 	}
-	error_msg_norm(errno_code);
-	return (1);
+	if (arg)
+	{
+		ft_putstr_fd("'", STDERR_FILENO);
+		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putstr_fd("': ", STDERR_FILENO);
+	}
 }
 
 void	execve_errs(t_data *data)
 {
 	if ((errno == ENOENT || errno == EFAULT)
-		&& ((data->prototype[0][0] == '~' || data->prototype[0][0] == '.'
-		|| data->prototype[0][0] == '/') || data->err_path_env))
+		&& (data->prototype[0][0] == '~' || data->prototype[0][0] == '.'
+		|| data->prototype[0][0] == '/' || data->err_path_env))
 		exit(error_msg(data, M_NOEXENT, NULL));
 	else if (errno == ENOENT || errno == EFAULT)
 		exit(error_msg(data, M_NOCMD, NULL));
-	else if (is_directory(data->executable) || errno == EACCES)
+	else if (errno == EACCES)
 		exit(error_msg(data, M_BADACCES, NULL));
 }

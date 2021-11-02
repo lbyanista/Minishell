@@ -1,26 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   signals.c                                          :+:      :+:    :+:   */
+/*   ft_strlen_2d.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/01 19:41:24 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/11/01 19:41:43 by mlabrayj         ###   ########.fr       */
+/*   Created: 2021/10/30 17:38:55 by ael-mezz          #+#    #+#             */
+/*   Updated: 2021/10/30 17:39:10 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "../headers/minishell.h"
+#include "../includes/libft.h"
 
-void	sig_handler(int sig)
+int	ft_strlen_2d(char **str)
 {
-	if (sig == SIGINT)
-	{
-		rl_on_new_line();
-		rl_redisplay();
-		rl_replace_line("", 0);
-		write(1, "  \b\b\n", 5);
-		rl_on_new_line();
-		rl_redisplay();
-	}
+	int	i;
+
+	i = 0;
+	while (str && str[i] != NULL)
+		i++;
+	return (i);
 }

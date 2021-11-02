@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/13 08:15:35 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/11/01 19:44:09 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/01 11:43:20 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,6 +14,7 @@
 # define MINISHELL_H
 
 # include "../libft/includes/libft.h"
+# include <fcntl.h>
 # include <errno.h>
 # include <sys/types.h>
 # include <signal.h>
@@ -42,8 +43,7 @@
 # define EXPORT_ERR 6
 # define UNSET_ERR 7
 # define NO_FILE -2
-
-typedef int		t_bool;
+# define BOOL int
 
 typedef struct s_process
 {
@@ -77,26 +77,29 @@ typedef struct s_info
 	char	*value;
 }				t_info;
 
+/*
+first node of garbage list contain a list to *char, the 2nd to char **char 
+*/
+
 typedef struct s_data
 {
-	t_list			*garbage;
 	t_list			*piped_cmd;
 	t_command		*command;
 	t_list			*word;
 	t_info			*info;
 	t_list			*exported;
 	t_list			*lst_child_id;
-	pid_t			id;
 	t_process		*process;
 	t_file_data		*file_data;
+	BOOL			passive;
+	BOOL			is_builtin;
+	BOOL			err_path_env;
+	BOOL			var_with_equals_sign;
+	BOOL			infile;
+	BOOL			outfile;
+	pid_t			id;
 	int				fd[4];
 	int				end[2];
-	t_bool			passive;
-	t_bool			is_builtin;
-	t_bool			err_path_env;
-	t_bool			var_with_equals_sign;
-	t_bool			infile;
-	t_bool			outfile;
 	int				argc;
 	int				quoting_state;
 	int				exit_status;
@@ -124,18 +127,27 @@ void		ft_dlst_delete_node(t_list *lst);
 t_list		*ft_lst_head(t_list *lst);
 int			is_backslashed(int i, char *str);
 int			find_char(char *str, char c);
-size_t		ft_countwords(char const *s, char *separator);
-char		**spliter(char const *s, char **ptr, char *separator, size_t cw);
 char		**ft_split_input(char const *s, char *separator);
-t_bool		quoted_fragment(char c);
+BOOL		quoted_fragment(char c);
 int			find_value(t_data *data, char *var, char **value);
 int			theres_atoken(char *fragment);
-int			is_redirection(char *str, int i, int quoting_state);
-t_bool		closed_quotes(char *input, int i);
+BOOL		is_redirection(t_data *data, char *str, int i);
+BOOL		closed_quotes(char *input, int i);
 char		*lst_to_word(t_list *lst);
 int			syntax_checking(t_data *data, int i);
 void		close_fds(t_data *data);
 void		close_fds_and_wait(t_data *data);
+void		build_env_vars(t_data *data, char *const	*envp);
+void		export_print(t_data *data);
+int			is_plus_sign(t_data *data, char *var, int i);
+void		error_prompt(t_data *data, char *arg);
+void		execve_errs(t_data *data);
+char		**env_array(t_data *data);
+int			norm_(int errno_code);
+int			error_msg(t_data *data, int errno_code, char *file);
+void		insert_var(t_data *data, char *input);
+int			error_msg(t_data *data, int errno_code, char *file);
+void		free_command_struct(t_data data);
 
 //======== parsing ============================================
 
@@ -158,24 +170,13 @@ int			export(t_data *data);
 int			cd(t_data *data);
 int			unset(t_data *data);
 void		build_env_vars(t_data *data, char *const	*envp);
-int			scan_env_vars(t_data *data);
 void		scan_command(t_data *data);
 int			file_search_using_path_var(t_data *data);
 char		*ft_getenv(t_data *data, char *var);
-int			stream_source(t_data *data, int read_end, t_bool	simple_cmd);
+int			stream_source(t_data *data, int read_end, BOOL	simple_cmd);
 void		execve_errs(t_data *data);
-int			is_directory(char *file);
-int			error_msg(t_data *data, int errno_code, char *file);
 
-int			simple_command(t_data *data);
-void		piped_commands(t_data *data);
-void		increase_shelllvl(t_data *data);
-void		export_print(t_data *data);
-int			check_export_syntax(t_data *data, int j);
-void		insert_var(t_data *data, char *input);
-void		error_prompt(t_data *data, char *arg);
-
-//============ SIGNALS =======================================
+//============ SIGNALS ===========
 
 void		sig_handler(int sig);
 

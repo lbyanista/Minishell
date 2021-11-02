@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   streams.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 11:00:30 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/29 12:50:10 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/01 13:31:57 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,10 @@ static int	open_file(t_data *data, int *stream_type)
 		flags = O_CREAT | O_WRONLY | O_TRUNC;
 	else
 		flags = O_CREAT | O_WRONLY | O_APPEND;
-	return (fd = open(path, flags, S_IRWXU));
+	fd = open(path, flags, S_IRWXU);
+	if (fd < 3)
+		fd = error_msg(data, M_ARGERR, path);
+	return (fd);
 }
 
 static void	close_unnecessary_fds(t_data *data, int file, int stream_type)
@@ -83,14 +86,14 @@ static int	cmd_input_output(t_data *data)
 		data->file_data = tmp->content;
 		file = open_file(data, &stream_type);
 		if (file < 3)
-			return (error_msg(data, M_ARGERR, NULL));
+			return (file);
 		close_unnecessary_fds(data, file, stream_type);
 		tmp = tmp->next;
 	}
 	return (EXIT_SUCCESS);
 }
 
-int	stream_source(t_data *data, int read_end, t_bool	simple_cmd)
+int	stream_source(t_data *data, int read_end, BOOL	simple_cmd)
 {
 	scan_files_list(data);
 	data->fd[2] = dup(STDIN_FILENO);

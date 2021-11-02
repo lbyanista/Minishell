@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   unset.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/06 11:44:55 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/23 17:17:47 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/01 08:12:59 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ int	unset(t_data *data)
 				free(data->info->value);
 				free(data->info->var);
 				free(data->info);
+				free(tmp);
 				break ;
 			}
 			tmp = tmp->next;

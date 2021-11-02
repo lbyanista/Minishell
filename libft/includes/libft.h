@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   libft.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 15:09:32 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/29 12:54:33 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/10/31 10:24:29 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 # define LIBFT_H
 # include <unistd.h>
 # include <string.h>
+# include <stdio.h>
 # include <stdlib.h>
-# include "get_next_line.h"
 
 typedef struct s_list
 {
