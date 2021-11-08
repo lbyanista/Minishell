@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/13 08:15:35 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/11/01 11:43:20 by ael-mezz         ###   ########.fr       */
+/*   Updated: 2021/11/08 10:54:05 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,6 +77,16 @@ typedef struct s_info
 	char	*value;
 }				t_info;
 
+typedef struct s_main
+{
+	int		fork;
+	char	*point;
+	int		exit_status;
+	int		in_heredoc;
+}	t_main;
+
+t_main	g_main;
+
 /*
 first node of garbage list contain a list to *char, the 2nd to char **char 
 */
@@ -110,6 +120,9 @@ typedef struct s_data
 	char			**prototype;
 	char			**argv;
 	char *const		*envp;
+
+	char			**args;
+	size_t			args_size;
 }				t_data;
 
 //==================== utils ===================================
@@ -140,13 +153,11 @@ void		close_fds_and_wait(t_data *data);
 void		build_env_vars(t_data *data, char *const	*envp);
 void		export_print(t_data *data);
 int			is_plus_sign(t_data *data, char *var, int i);
-void		error_prompt(t_data *data, char *arg);
 void		execve_errs(t_data *data);
 char		**env_array(t_data *data);
 int			norm_(int errno_code);
 int			error_msg(t_data *data, int errno_code, char *file);
 void		insert_var(t_data *data, char *input);
-int			error_msg(t_data *data, int errno_code, char *file);
 void		free_command_struct(t_data data);
 
 //======== parsing ============================================
@@ -167,17 +178,16 @@ int			builtin(t_data *data);
 int			echo(t_data *data);
 int			env(t_data *data);
 int			export(t_data *data);
-int			cd(t_data *data);
+// int			cd(t_data *data);
+int			cd(t_data *data, char **envp);
 int			unset(t_data *data);
 void		build_env_vars(t_data *data, char *const	*envp);
 void		scan_command(t_data *data);
 int			file_search_using_path_var(t_data *data);
 char		*ft_getenv(t_data *data, char *var);
 int			stream_source(t_data *data, int read_end, BOOL	simple_cmd);
-void		execve_errs(t_data *data);
-
-//============ SIGNALS ===========
-
 void		sig_handler(int sig);
+void		pwd(char *ptr);
+void		ft_exit(t_data *data);
 
 #endif
