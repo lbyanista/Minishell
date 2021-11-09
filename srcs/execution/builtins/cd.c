@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/09/24 18:16:59 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/11/08 11:43:45 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/09 15:28:56 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -90,10 +90,11 @@ int	var_exist(char **envp, char *argv)
 	return (0);
 }
 
-void	new_pwd(char **envp, char *path, char *newpath)
+int	get_new_path(t_data *data, char *path)
 {
-	int	i;
-	int	size;
+	char	*home_path;
+	int		size;
+	int		i;
 
 	i = 0;
 	size = getsize(envp);
@@ -103,7 +104,7 @@ void	new_pwd(char **envp, char *path, char *newpath)
 			|| *(envp[i] + 2) != 'D')
 			i++;
 		free(envp[i]);
-		envp[i] = ft_strjoin("PWD=", newpath);
+		envp[i] = ft_strjoin("PWD=", ft_getenv(data, "HOME"));
 	}
 	if (var_exist(envp, "OLDPWD"))
 		replace_oldpwd(envp, path, i);
@@ -136,22 +137,6 @@ int	checkdir(char *argv)
 	return (0);
 }
 
-char	*cd_home(char **envp, char *path)
-{
-	int		i;
-	char	*newpath;
-
-	i = var_exist(envp, "HOME");
-	if (i == 0)
-	{
-		not_valid_id("", "cd: ", "HOME not set\n");
-		g_main.exit_status = 1;
-		return (NULL);
-	}
-	newpath = envp[i] + 5;
-	new_pwd(envp, path, newpath);
-	return (newpath);
-}
 
 void	cd2(t_data *data, char **envp, char *path)
 {
@@ -180,31 +165,20 @@ void	cd2(t_data *data, char **envp, char *path)
 	}
 }
 
-int	cd(t_data *data, char **envp)
+int	cd(t_data *data)
 {
 	char	*path;
-	char	*newpath;
 
-	g_main.exit_status = 0;
-	path = malloc(100);
+	path = malloc(1024);
 	getcwd(path, 1024);
-	if (data->args_size == 1)
+	if (!check_prototype(data->prototype))
 	{
 		free(g_main.point);
 		g_main.point = ft_strdup("");
-		newpath = cd_home(envp, path);
-		checkdir(newpath);
+		checkdir(get_new_path(path));
 	}
 	else
 		cd2(data, envp, path);
 	free(path);
 	return (g_main.exit_status);
-}
-
-int main(int ac, char **av, char **envp)
-{
-	t_data *data;
-	
-	cd(data, envp);
-	return 0;
 }

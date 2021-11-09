@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:22:16 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/11/06 12:55:54 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/09 15:10:39 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,4 +66,20 @@ void	execve_errs(t_data *data)
 		exit(error_msg(data, M_NOCMD, NULL));
 	else if (errno == EACCES)
 		exit(error_msg(data, M_BADACCES, NULL));
+}
+
+int	check_prototype(char **prototype)
+{
+	int i;
+
+	i = 0;
+	if (prototype)
+	{
+		while (prototype[++i])
+		{
+			if (*prototype[i])
+				return (1);
+		}
+	}
+	return (0);
 }

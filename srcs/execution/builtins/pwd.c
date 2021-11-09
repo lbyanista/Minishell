@@ -5,14 +5,14 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/07 13:25:34 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/11/07 13:48:01 by mlabrayj         ###   ########.fr       */
+/*   Created: 2021/11/03 15:23:09 by mlabrayj          #+#    #+#             */
+/*   Updated: 2021/11/09 14:48:50 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-void	pwd(char *ptr)
+int pwd(t_data  *data)
 {
 	char	*path;
 	char	*tmp;
@@ -28,4 +28,5 @@ void	pwd(char *ptr)
 	}
 	printf("%s\n", path);
 	free(path);
+    return (0);
 }

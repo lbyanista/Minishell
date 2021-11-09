@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/24 13:29:24 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/11/02 12:40:35 by ael-mezz         ###   ########.fr       */
+/*   Updated: 2021/11/09 15:13:04 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,10 +101,8 @@ int	export(t_data *data)
 	int		i;
 
 	i = 0;
-	if (!data->prototype[1] || !data->prototype[1][0])
+	if (!check_prototype(data->prototype))
 		export_print(data);
-	else if (*(data->prototype)[1] == '-')
-		return (error_msg(data, M_STXERR, NULL));
 	while (data->prototype[++i] && data->prototype[i][0])
 	{
 		if (check_export_syntax(data, i) == ERROR)
