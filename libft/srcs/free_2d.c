@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   free_2d.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/30 17:39:23 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/30 17:39:41 by ael-mezz         ###   ########.fr       */
+/*   Updated: 2021/11/15 14:30:59 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,8 +17,11 @@ int	free_2d(char **str)
 	int	i;
 
 	i = 0;
-	while (str[i] != NULL)
-		free(str[i++]);
-	free(str);
+	if (str)
+	{
+		while (str[i] != NULL)
+			free(str[i++]);
+		free(str);
+	}
 	return (0);
 }

@@ -6,101 +6,88 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/07 13:31:46 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/11/09 15:37:00 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/12 15:13:50 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-unsigned long long int	ft_atoi2(const char *str)
+unsigned long long int	to_ullong(const char *str, int type)
 {
-	unsigned long long int	res;
-	long					sign;
-	unsigned int			i;
+	int						i;
+	int						sign;
+	unsigned long long int	ret;
 
-	res = 0;
-	sign = 1;
 	i = 0;
-	while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n'
-		|| str[i] == '\r' || str[i] == '\v' || str[i] == '\f')
-		i++;
+	ret = 0;
+	sign = 1;
 	if (str[i] == '-' || str[i] == '+')
 	{
-		if (str[i] == '-')
-			sign = -1;
-		i++;
-	}
-	while (str[i] >= '0' && str[i] <= '9')
-	{
-		res = res * 10 + str[i++] - '0';
-		if (res > 9223372036854775807 && sign == -1)
-			return (0);
-		if (res > 9223372036854775807 && sign == 1)
-			return (-1);
-	}
-	return ((int)(res * sign));
-}
-
-static	int	is_valid_numeric(char *str)
-{
-	unsigned long long int	res;
-	long					sign;
-	unsigned int			i;
-
-	res = 0;
-	sign = 1;
-	i = 0;
-	if (str[i] == '-' || str[i] == '+')
-	{
-		if (str[i] == '-')
-			sign = -1;
-		i++;
+		if (str[i++] == '-')
+			sign = type;
 	}
 	while (str[i])
-	{
-		if (!ft_isdigit(str[i]))
-			return (0);
-		res = res * 10 + str[i++] - '0';
-		if ((res > 9223372036854775807 && sign == -1)
-			|| (res > 9223372036854775807 && sign == 1))
-			return (0);
-	}
-	return (1);
+		ret = ret * 10 + str[i++] - '0';
+	return (ret * sign);
 }
 
-void	ft_exit2(char *cmd)
+static BOOL	is_over_limit(char *arg, int *negative)
 {
-	write(1, "exit\nminishell: exit: ", 23);
-	write(1, cmd, ft_strlen(cmd));
-	write(1, ": numeric argument required\n", 29);
-	g_main.exit_status = 255;
-}
+	int		len;
+	int		j;
 
-void	ft_exit(t_data *data)
-{
-	if (data && data->args_size >= 2)
+	j = 1;
+	len = ft_strlen(arg);
+	if (!ft_isdigit(arg[0]))
 	{
-		if (!is_valid_numeric(data->args[1]))
+		if (arg[0] == '+' || arg[0] == '-')
 		{
-			ft_exit2(data->args[1]);
-			exit(g_main.exit_status);
-		}
-		else if (data->args_size > 2)
-		{
-			write(1, "exit\nminishell: exit: too many arguments\n", 42);
-			g_main.exit_status = 1;
+			if (arg[0] == '-')
+				*negative = TRUE;
+			len--;
 		}
 		else
-		{
-			write(1, "exit\n", 6);
-			g_main.exit_status = ft_atoi2(data->args[1]) % 256;
-			exit(g_main.exit_status);
-		}
+			return (TRUE);
 	}
-	else
+	while (arg[++j])
 	{
-		write(1, "exit\n", 6);
-		g_main.exit_status = 0;
-		exit(g_main.exit_status);
+		if (!ft_isdigit(arg[j]))
+			return (TRUE);
 	}
+	if ((len > 19 || len == 0))
+		return (TRUE);
+	return (FALSE);
+}
+
+static BOOL	is_valid_argument(char *arg)
+{
+	BOOL					negative;
+	unsigned long long int	value;
+
+	negative = FALSE;
+	if (is_over_limit(arg, &negative))
+		return (FALSE);
+	value = to_ullong(arg, 1);
+	if (value > LLONG_MAX)
+	{
+		if (!(value - 1 == LLONG_MAX && negative))
+			return (FALSE);
+	}
+	return (TRUE);
+}
+
+int	exit_shell(t_data data)
+{
+	if (data.prototype[1])
+	{
+		if (data.prototype[2])
+			return (error_msg(data, "too many arguments\n", 255, NULL));
+		else if (!is_valid_argument(data.prototype[1]))
+			g_shell.exit_status = \
+				error_msg(data, "numeric argument required\n", 255, NULL);
+		else
+			g_shell.exit_status = to_ullong(data.prototype[1], -1) % 256;
+	}
+	ft_putstr_fd("exit\n", STDERR_FILENO);
+	exit(g_shell.exit_status);
 }

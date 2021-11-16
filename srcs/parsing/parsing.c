@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/18 17:20:29 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/11/02 13:12:54 by ael-mezz         ###   ########.fr       */
+/*   Updated: 2021/11/14 17:29:41 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "../../headers/minishell.h"
 
 #include "../../headers/minishell.h"
 
@@ -34,7 +36,7 @@ static int	fill_branch(t_data *data, int i)
 	char	*fragment;
 	int		ret;
 
-	if (!data->command)
+	if (!data->command && data->word)
 	{
 		data->command = malloc(sizeof(t_command));
 		data->command->file = NULL;
@@ -43,9 +45,9 @@ static int	fill_branch(t_data *data, int i)
 	fragment = lst_to_word(data->word);
 	if (!theres_atoken(fragment))
 	{
-		if (data->input[i + 1] || data->command->prototype)
-			return (EXIT_SUCCESS);
-		return (EXIT_FAILURE);
+		if (!data->input[i + 1] && !data->command && data->piped_cmd)
+			return (1);
+		return (0);
 	}
 	ret = make_branch(data, fragment);
 	free(fragment);
@@ -60,10 +62,12 @@ static int	fill_pipeline(t_data *data, int i)
 	if (!data->input[i + 1] && data->input[i] != ' ' && data->input[i] != '|')
 		ft_lstadd_back(&data->word, ft_lstnew(ft_substr(data->input, i, 1)));
 	if (data->input[i - 1] == '|')
-		return (EXIT_FAILURE);
+		return (1);
 	if (data->word || !data->command)
 		if (fill_branch(data, i))
-			return (EXIT_FAILURE);
+			return (1);
+	if (!data->command && !data->piped_cmd)
+		return (0);
 	ft_dlstadd_back(&data->piped_cmd, ft_dlstnew(data->command));
 	free_list(&data->word);
 	return (syntax_checking(data, i));
@@ -81,7 +85,7 @@ static	int	build_tree(t_data *data, int i)
 	if (!data->input[i + 1])
 		return (fill_pipeline(data, i));
 	ft_lstadd_back(&data->word, ft_lstnew(ft_substr(data->input, i, 1)));
-	return (EXIT_SUCCESS);
+	return (0);
 }
 
 int	parser(t_data *data)
@@ -96,13 +100,13 @@ int	parser(t_data *data)
 		define_quoting_state(data, data->input, i);
 		if (build_tree(data, i))
 		{
-			ret = error_msg(data, M_STXERR, NULL);
+			ret = error_msg(*data, M_STXERR, 1, NULL);
 			break ;
 		}
 	}
 	if (!ret)
 		ret = hundle_heredoc(data);
 	if (ret)
-		data->exit_status = ret;
+		g_shell.exit_status = ret;
 	return (ret);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 17:20:15 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/31 10:25:02 by ael-mezz         ###   ########.fr       */
+/*   Updated: 2021/11/14 17:26:30 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,6 @@ int	find_char(char *str, char c)
 		}
 	}
 	return (-1);
-}
-
-BOOL	quoted_fragment(char c)
-{
-	if (c == '\'' || c == '\"')
-		return (TRUE);
-	return (FALSE);
 }
 
 int	syntax_checking(t_data *data, int i)

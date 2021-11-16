@@ -3,83 +3,67 @@
 /*                                                        :::      ::::::::   */
 /*   execution_utils.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/20 14:22:16 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/11/09 15:10:39 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/14 17:28:58 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../headers/minishell.h"
 
-static void	error_prompt(t_data *data, char *arg)
+void	execute_edited_prototype(t_data *data, char	*cmd)
+{
+	char		**tmp;
+
+	tmp = data->prototype;
+	data->prototype = ft_split(cmd, ' ');
+	free(cmd);
+	execute_builtin(data);
+	free_2d(data->prototype);
+	data->prototype = tmp;
+}
+
+BOOL	is_relative_path(t_data data)
+{
+	return (data.prototype[0][0] == '~' || data.prototype[0][0] == '.'
+		|| data.prototype[0][0] == '/');
+}
+
+int	error_msg(t_data data, char *message, int exit_code, char *file)
 {
 	ft_putstr_fd("minishell: ", STDERR_FILENO);
-	if (data->prototype)
+	if (data.prototype)
 	{
-		ft_putstr_fd(data->prototype[0], STDERR_FILENO);
+		ft_putstr_fd(data.prototype[0], STDERR_FILENO);
 		ft_putstr_fd(": ", STDERR_FILENO);
 	}
-	if (arg)
+	if (file)
 	{
 		ft_putstr_fd("'", STDERR_FILENO);
-		ft_putstr_fd(arg, STDERR_FILENO);
+		ft_putstr_fd(file, STDERR_FILENO);
 		ft_putstr_fd("': ", STDERR_FILENO);
 	}
+	if (message)
+		ft_putstr_fd(message, STDERR_FILENO);
+	else
+		perror(NULL);
+	return (exit_code);
 }
 
-int	error_msg(t_data *data, int errno_code, char *file)
-{
-	error_prompt(data, file);
-	if (errno_code == M_NOCMD || errno_code == M_NOEXENT)
-	{
-		if (errno_code == M_NOCMD)
-			ft_putstr_fd("command not found\n", STDERR_FILENO);
-		else
-			ft_putstr_fd("No such file or directory\n", STDERR_FILENO);
-		return (127);
-	}
-	else if (errno_code == M_ARGERR || errno_code == M_NOVALID)
-	{
-		if (errno_code == M_NOVALID)
-			ft_putstr_fd("not a valid identifier\n", STDERR_FILENO);
-		else
-			perror(NULL);
-		return (1);
-	}
-	else if (errno_code == M_BADACCES)
-	{
-		ft_putstr_fd("can't access/execute\n", STDERR_FILENO);
-		return (126);
-	}
-	ft_putstr_fd("syntax error!\n", STDERR_FILENO);
-	return (258);
-}
-
-void	execve_errs(t_data *data)
+void	execve_errs(t_data data)
 {
 	if ((errno == ENOENT || errno == EFAULT)
-		&& (data->prototype[0][0] == '~' || data->prototype[0][0] == '.'
-		|| data->prototype[0][0] == '/' || data->err_path_env))
-		exit(error_msg(data, M_NOEXENT, NULL));
-	else if (errno == ENOENT || errno == EFAULT)
-		exit(error_msg(data, M_NOCMD, NULL));
-	else if (errno == EACCES)
-		exit(error_msg(data, M_BADACCES, NULL));
-}
-
-int	check_prototype(char **prototype)
-{
-	int i;
-
-	i = 0;
-	if (prototype)
+		&& (is_relative_path(data) || data.err_path_env))
 	{
-		while (prototype[++i])
-		{
-			if (*prototype[i])
-				return (1);
-		}
+		errno = ENOENT;
+		exit(error_msg(data, NULL, 127, NULL));
 	}
-	return (0);
+	else if (errno == ENOENT || errno == EFAULT)
+		exit(error_msg(data, M_UNFCMD, 127, NULL));
+	else if (errno == EACCES)
+	{
+		errno = EPERM;
+		exit(error_msg(data, NULL, 126, NULL));
+	}
 }

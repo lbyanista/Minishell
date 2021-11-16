@@ -6,7 +6,7 @@
 /*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/13 08:15:35 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/11/09 15:37:10 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/15 18:32:47 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,15 @@
 # include <readline/readline.h>
 # include <readline/history.h>
 # include <dirent.h>
+# include <limits.h>
 
 //macros
-# define M_ARGERR 300
-# define M_BADACCES 301
-# define M_NOVALID 302
-# define M_NOCMD 303
-# define M_NOEXENT 304
-# define M_STXERR 305
+# define M_ARGERR "No such file or directory\n"
+# define M_NOVALID "not a valid identifier\n"
+# define M_UNFCMD "command not found\n"
+# define M_FUNERR "function failure\n"
+# define M_NOHOME "HOME not set\n"
+# define M_STXERR "syntax error\n"
 # define TRUE 10
 # define FALSE 0
 # define ERROR -1
@@ -77,9 +78,11 @@ typedef struct s_info
 	char	*value;
 }				t_info;
 
-/*
-first node of garbage list contain a list to *char, the 2nd to char **char 
-*/
+typedef struct s_shell
+{
+	BOOL	parent;
+	int		exit_status;
+}				t_shell;
 
 typedef struct s_data
 {
@@ -92,7 +95,6 @@ typedef struct s_data
 	t_process		*process;
 	t_file_data		*file_data;
 	BOOL			passive;
-	BOOL			is_builtin;
 	BOOL			err_path_env;
 	BOOL			var_with_equals_sign;
 	BOOL			infile;
@@ -102,7 +104,6 @@ typedef struct s_data
 	int				end[2];
 	int				argc;
 	int				quoting_state;
-	int				exit_status;
 	char			*input;
 	char			*executable;
 	char			**local_env;
@@ -112,24 +113,15 @@ typedef struct s_data
 	char *const		*envp;
 }				t_data;
 
+t_shell	g_shell;
+
 //==================== utils ===================================
 
 void		free_list(t_list **lst);
 void		print_list(t_list *lst);
-t_list		*ft_lstprevious(t_list *lst);
 void		ft_dlstadd_back(t_list **alst, t_list *new);
-void		print_content_list(t_list *lst);
-void		print_lines(t_data data);
-int			tokens_analyser(t_data *data);
-t_list		*lst_elem(t_list *lst, int index);
 t_list		*ft_dlstnew(void *content);
-void		ft_dlst_delete_node(t_list *lst);
-t_list		*ft_lst_head(t_list *lst);
-int			is_backslashed(int i, char *str);
 int			find_char(char *str, char c);
-char		**ft_split_input(char const *s, char *separator);
-BOOL		quoted_fragment(char c);
-int			find_value(t_data *data, char *var, char **value);
 int			theres_atoken(char *fragment);
 BOOL		is_redirection(t_data *data, char *str, int i);
 BOOL		closed_quotes(char *input, int i);
@@ -140,13 +132,14 @@ void		close_fds_and_wait(t_data *data);
 void		build_env_vars(t_data *data, char *const	*envp);
 void		export_print(t_data *data);
 int			is_plus_sign(t_data *data, char *var, int i);
-void		execve_errs(t_data *data);
+void		execve_errs(t_data data);
 char		**env_array(t_data *data);
-int			norm_(int errno_code);
-int			error_msg(t_data *data, int errno_code, char *file);
+int			error_msg(t_data data, char *message, int exit_code, char *file);
 void		insert_var(t_data *data, char *input);
+void		execute_edited_prototype(t_data *data, char	*cmd);
 void		free_command_struct(t_data data);
-int			check_prototype(char **prototype);
+void		free_info_struct(t_data	*data);
+BOOL		is_relative_path(t_data data);
 
 //======== parsing ============================================
 
@@ -162,20 +155,20 @@ int			hundle_redirection(t_data *data, char *fragment,
 //=========== execution ========================================
 
 int			execute(t_data *data);
-int			builtin(t_data *data);
-int			echo(t_data *data);
-int			env(t_data *data);
+BOOL		is_builtin(t_data data);
+int			execute_builtin(t_data *data);
+int			echo(t_data data);
+int			env(t_data data);
 int			export(t_data *data);
 int			cd(t_data *data);
+int			pwd(t_data data);
 int			unset(t_data *data);
+int			exit_shell(t_data data);
 void		build_env_vars(t_data *data, char *const	*envp);
-void		scan_command(t_data *data);
+void		scan_prototype(t_data *data);
 int			file_search_using_path_var(t_data *data);
-char		*ft_getenv(t_data *data, char *var);
+char		*ft_getenv(t_data data, char *var);
 int			stream_source(t_data *data, int read_end, BOOL	simple_cmd);
 void		sig_handler(int sig);
-void		pwd(t_data	*data);
-void		ft_exit(t_data *data);
-
 
 #endif

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   export.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/24 13:29:24 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/11/09 15:13:04 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/12 18:50:03 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ static int	already_exported(t_data *data, int i, t_info *info_1)
 				info_1->value = NULL;
 			}
 			info_1->value
-				= ft_strjoin_and_free_s1(info_1->value, data->info->value);
+				= ft_strjoin_and_free(info_1->value, data->info->value, 1);
 		}
 		return (1);
 	}
@@ -84,10 +84,7 @@ static int	scan_env_vars(t_data *data)
 		if (already_exported(data, i, info_1))
 		{
 			data->exported = tmp;
-			if (ft_strcmp(data->info->value, info_1->value))
-				free(data->info->value);
-			free(data->info);
-			free(data->info->var);
+			free_info_struct(data);
 			return (1);
 		}
 		data->exported = data->exported->next;
@@ -101,12 +98,15 @@ int	export(t_data *data)
 	int		i;
 
 	i = 0;
-	if (!check_prototype(data->prototype))
+	if (!data->prototype[1] || !data->prototype[1][0])
 		export_print(data);
 	while (data->prototype[++i] && data->prototype[i][0])
 	{
 		if (check_export_syntax(data, i) == ERROR)
-			return (error_msg(data, M_NOVALID, data->prototype[i]));
+		{
+			free_info_struct(data);
+			return (error_msg(*data, M_NOVALID, 1, data->prototype[i]));
+		}
 		if (!scan_env_vars(data))
 			insert_var(data, NULL);
 	}

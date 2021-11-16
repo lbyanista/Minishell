@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utils.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 16:44:54 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/31 10:25:02 by ael-mezz         ###   ########.fr       */
+/*   Updated: 2021/11/14 17:25:46 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,21 +17,21 @@ BOOL	theres_atoken(char *fragment)
 	int	i;
 
 	i = -1;
-	while (fragment[++i])
+	if (fragment)
 	{
-		if (fragment[i] != ' ')
-			return (TRUE);
+		while (fragment[++i])
+			if (fragment[i] != ' ')
+				return (TRUE);
+		free(fragment);
 	}
-	free(fragment);
 	return (FALSE);
 }
 
 BOOL	is_redirection(t_data *data, char *str, int i)
 {
 	define_quoting_state(data, str, i);
-	if ((str[i] == '>' || str[i] == '<') && data->quoting_state == UNQUOTED)
-		return (TRUE);
-	return (FALSE);
+	return ((str[i] == '>' || str[i] == '<')
+		&& data->quoting_state == UNQUOTED);
 }
 
 BOOL	closed_quotes(char *input, int i)
@@ -40,10 +40,8 @@ BOOL	closed_quotes(char *input, int i)
 
 	j = i;
 	while (input[++j])
-	{
 		if (input[j] == input[i])
 			return (TRUE);
-	}
 	return (FALSE);
 }
 
@@ -56,7 +54,7 @@ void	define_quoting_state(t_data *data, char *input, int i)
 	}
 	else if (input[i] == data->quoting_state)
 		data->passive = TRUE;
-	if (data->quoting_state == UNQUOTED && quoted_fragment(input[i])
+	if (data->quoting_state == UNQUOTED && (input[i] == '"' || input[i] == '\'')
 		&& closed_quotes(input, i))
 		data->quoting_state = input[i];
 }
@@ -69,6 +67,8 @@ char	*lst_to_word(t_list *lst)
 
 	i = 0;
 	l = ft_lstsize(lst);
+	if (!l)
+		return (NULL);
 	str = malloc(sizeof(*str) * (l + 1));
 	while (lst)
 	{

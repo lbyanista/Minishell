@@ -3,30 +3,53 @@
 /*                                                        :::      ::::::::   */
 /*   builtins.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/14 14:23:07 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/11/09 14:48:04 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/14 17:29:16 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-int	builtin(t_data *data)
+/*
+pathetic, we arent allowed to use arrays
+*/
+
+BOOL	is_builtin(t_data data)
 {
-	data->is_builtin = TRUE;
+	char	**builtins;
+	int		i;
+
+	builtins = ft_split("echo export env pwd unset exit cd CD cD Dc", ' ');
+	i = -1;
+	while (builtins[++i])
+	{
+		if (!ft_strcmp(data.prototype[0], builtins[i]))
+		{
+			free_2d(builtins);
+			return (TRUE);
+		}
+	}
+	free_2d(builtins);
+	return (FALSE);
+}
+
+int	execute_builtin(t_data *data)
+{
 	if (!ft_strcmp(data->prototype[0], "echo"))
-		return (echo(data));
+		return (echo(*data));
 	else if (!ft_strcmp(data->prototype[0], "export"))
 		return (export(data));
 	else if (!ft_strcmp(data->prototype[0], "env"))
-		return (env(data));
-	else if (!ft_strcmp(data->prototype[0], "cd"))
-		return (cd(data));
+		return (env(*data));
+	else if (!ft_strcmp(data->prototype[0], "pwd"))
+		return (pwd(*data));
 	else if (!ft_strcmp(data->prototype[0], "unset"))
 		return (unset(data));
-	else if (!ft_strcmp(data->prototype[0], "pwd"))
-		return (pwd(data));
-	data->is_builtin = FALSE;
+	else if (!ft_strcmp(data->prototype[0], "exit"))
+		return (exit_shell(*data));
+	else if (is_builtin(*data))
+		return (cd(data));
 	return (EXIT_SUCCESS);
 }

@@ -3,30 +3,23 @@
 /*                                                        :::      ::::::::   */
 /*   pwd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/11/03 15:23:09 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/11/09 14:48:50 by mlabrayj         ###   ########.fr       */
+/*   Created: 2021/11/07 13:25:34 by mlabrayj          #+#    #+#             */
+/*   Updated: 2021/11/11 10:17:35 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../../../headers/minishell.h"
 
-int pwd(t_data  *data)
+int	pwd(t_data data)
 {
 	char	*path;
-	char	*tmp;
 
-	ptr = NULL;
-	path = malloc(100);
-	getcwd(path, 1024);
-	tmp = path;
-	if (g_main.point)
-	{
-		path = ft_strjoin(path, g_main.point);
-		free(tmp);
-	}
+	if (data.prototype[1] && *data.prototype[1] == '-')
+		return (error_msg(data, M_STXERR, 1, data.prototype[1]));
+	path = getcwd(NULL, 0);
 	printf("%s\n", path);
 	free(path);
-    return (0);
+	return (EXIT_SUCCESS);
 }

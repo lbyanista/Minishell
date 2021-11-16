@@ -6,7 +6,7 @@
 /*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/10/12 15:09:32 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/11/02 12:40:52 by ael-mezz         ###   ########.fr       */
+/*   Updated: 2021/11/11 17:43:12 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ typedef struct s_list
 
 int					ft_strcmp(char *s1, char *s2);
 void				ft_free(char **s);
-long int			ft_atoi(const char *str);
+int					ft_atoi(const char *str);
 void				ft_bzero(void *s, size_t n);
 int					ft_isalnum(int c);
 int					ft_isalpha(int c);
@@ -81,7 +81,6 @@ int					ft_strlen_2d(char **str);
 int					free_2d(char **str);
 int					ft_strcmp(char *s1, char *s2);
 char				**realloc_2d(char **str, int d);
-char				*ft_strjoin_and_free_s1(char *s1, char const *s2);
-char				*ft_strjoin_and_free_all(char *s1, char *s2);
+char				*ft_strjoin_and_free(char *s1, char *s2, int to_free);
 
 #endif

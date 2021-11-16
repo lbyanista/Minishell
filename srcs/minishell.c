@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   minishell.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/05/13 08:15:00 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/11/02 12:43:57 by ael-mezz         ###   ########.fr       */
+/*   Updated: 2021/11/14 15:05:32 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,15 +16,16 @@ static void	global_init(t_data *data, int argc,
 	char **argv, char *const	*envp)
 {
 	data->exported = NULL;
-	data->exit_status = 0;
 	data->argc = argc;
 	data->argv = argv;
 	data->envp = envp;
 	build_env_vars(data, envp);
+	g_shell.exit_status = 0;
 }
 
 static void	_init(t_data *data)
 {
+	g_shell.parent = TRUE;
 	data->piped_cmd = NULL;
 	data->word = NULL;
 	data->lst_child_id = NULL;
@@ -72,16 +73,19 @@ int	main(int argc, char **argv, char *const envp[])
 
 	global_init(&data, argc, argv, envp);
 	signal(SIGINT, sig_handler);
+	signal(SIGQUIT, sig_handler);
 	while (1)
 	{
-		data.input = readline(PROMPT);
 		_init(&data);
+		data.input = readline(PROMPT);
 		if (!data.input || !*data.input || parser(&data) || execute(&data))
 			;
 		else
-			data.exit_status = 0;
+			g_shell.exit_status = 0;
 		free_leaks(data);
-		if (data.input && *data.input)
+		if (!data.input)
+			execute_edited_prototype(&data, ft_strdup("exit"));
+		else if (*data.input)
 			add_history(data.input);
 		free(data.input);
 	}

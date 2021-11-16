@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signals.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/11/01 19:41:24 by mlabrayj          #+#    #+#             */
-/*   Updated: 2021/11/09 15:36:09 by mlabrayj         ###   ########.fr       */
+/*   Updated: 2021/11/12 14:02:17 by ael-mezz         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,9 @@
 
 static void	sig_handler_c(void)
 {
-	if (!g_main.fork)
+	if (g_shell.parent)
 	{
-		g_main.in_heredoc = 1;
-		g_main.exit_status = 1;
+		g_shell.exit_status = 1;
 		rl_on_new_line();
 		rl_redisplay();
 		write(1, "  \b\b\n", 5);
@@ -26,7 +25,7 @@ static void	sig_handler_c(void)
 		rl_redisplay();
 	}
 	else
-		g_main.exit_status = 130;
+		g_shell.exit_status = 130;
 }
 
 void	sig_handler(int sig)
@@ -35,10 +34,10 @@ void	sig_handler(int sig)
 		sig_handler_c();
 	else if (sig == SIGQUIT)
 	{
-		if (g_main.fork)
+		if (!g_shell.parent)
 		{
 			write(1, "Quit: 3", 7);
-			g_main.exit_status = 131;
+			g_shell.exit_status = 131;
 		}
 		else
 		{
@@ -47,6 +46,6 @@ void	sig_handler(int sig)
 			write(1, "  \b\b", 4);
 		}
 	}
-	if (g_main.fork)
+	if (!g_shell.parent)
 		write(1, "\n", 1);
 }

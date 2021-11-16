@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc_parsing.c                                  :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ael-mezz <ael-mezz@student.1337.ma>        +#+  +:+       +#+        */
+/*   By: mlabrayj <mlabrayj@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/10/19 16:48:47 by ael-mezz          #+#    #+#             */
-/*   Updated: 2021/10/31 09:40:20 by ael-mezz         ###   ########.fr       */
+/*   Updated: 2021/11/12 15:21:41 by mlabrayj         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,16 +17,33 @@ static int	initiate_vars(t_data *data, int file_number, t_h_d *h_d)
 	int	ret;
 
 	h_d->input = NULL;
-	h_d->file_name = ft_strjoin_and_free_all
-		(ft_strdup("/tmp/.heredoc_"), ft_itoa(file_number));
+	h_d->file_name = ft_strjoin_and_free
+		("/tmp/.heredoc_", ft_itoa(file_number), 2);
 	h_d->fd = open(h_d->file_name, O_CREAT | O_RDWR | O_TRUNC, 0666);
 	if (h_d->fd < 3)
 	{
-		ret = error_msg(data, M_ARGERR, h_d->file_name);
+		ret = error_msg(*data, M_ARGERR, 1, h_d->file_name);
 		free(h_d->file_name);
 		return (ret);
 	}
-	return (EXIT_SUCCESS);
+	return (0);
+}
+
+static void	catch_input(t_data data, t_h_d h_d)
+{
+	while (1)
+	{
+		h_d.input = readline("> ");
+		if (!h_d.input || !ft_strcmp(data.file_data->path, h_d.input))
+		{
+			if (h_d.input)
+				free(h_d.input);
+			break ;
+		}
+		write(h_d.fd, h_d.input, ft_strlen(h_d.input));
+		write(h_d.fd, "\n", 1);
+		free(h_d.input);
+	}
 }
 
 static int	input_stream_literal(t_data *data)
@@ -36,20 +53,18 @@ static int	input_stream_literal(t_data *data)
 
 	file_number++;
 	if (initiate_vars(data, file_number, &h_d))
-		return (EXIT_FAILURE);
-	while (1)
-	{
-		h_d.input = readline("> ");
-		if (!ft_strcmp(data->file_data->path, h_d.input))
-			break ;
-		write(h_d.fd, h_d.input, ft_strlen(h_d.input));
-		write(h_d.fd, "\n", 1);
-		free(h_d.input);
-	}
-	free(h_d.input);
+		return (ERROR);
+	catch_input(*data, h_d);
 	data->file_data->path_2 = h_d.file_name;
 	close(h_d.fd);
-	return (EXIT_SUCCESS);
+	return (0);
+}
+
+int	hundle_heredoc_norm(t_data *data, t_list *tmp, t_list *tmp_2)
+{
+	data->command->file = tmp_2;
+	data->piped_cmd = tmp;
+	return (EXIT_FAILURE);
 }
 
 int	hundle_heredoc(t_data *data)
@@ -67,7 +82,7 @@ int	hundle_heredoc(t_data *data)
 			data->file_data = data->command->file->content;
 			if (data->file_data->id == HEREDOC)
 				if (input_stream_literal(data))
-					return (EXIT_FAILURE);
+					return (hundle_heredoc_norm(data, tmp, tmp_2));
 			data->command->file = data->command->file->next;
 		}
 		data->command->file = tmp_2;
